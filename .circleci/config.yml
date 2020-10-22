@@ -18,6 +18,6 @@ workflows:
       - file-validation
       - publish-to-s3:
           context:
-            - Credential
+            - Credentials
 
 
