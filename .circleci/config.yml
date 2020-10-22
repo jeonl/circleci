@@ -19,5 +19,7 @@ workflows:
       - publish-to-s3:
           context:
             - Credentials
+          requires:
+            - file-validation
 
 
