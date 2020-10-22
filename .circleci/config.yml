@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: 'ipython/ipython'
+      - image: 'jupyterhub/jupyterhub'
     steps:
       - checkout
-      - run: ipython run notebook_test.ipynb
+      - run: jupyter nbconvert --execute notebook_test.ipynb
