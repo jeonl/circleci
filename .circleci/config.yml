@@ -5,5 +5,5 @@ jobs:
       - image: 'jupyter/pyspark-notebook'
     steps:
       - checkout
-      - run: echo "API_KEY = %{API_KEY}"
+      - run: echo "API_KEY = ${API_KEY}"
       - run: jupyter nbconvert --to notebook --execute notebook_test.ipynb
