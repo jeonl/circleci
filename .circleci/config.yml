@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: 'jupyterhub/jupyterhub'
+      - image: 'jupyter/pyspark-notebook'
     steps:
       - checkout
       - run: jupyter nbconvert --execute notebook_test.ipynb
