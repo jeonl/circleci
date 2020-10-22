@@ -5,4 +5,4 @@ jobs:
       - image: 'jupyter/pyspark-notebook'
     steps:
       - checkout
-      - run: jupyter nbconvert --execute notebook_test.ipynb
+      - run: jupyter nbconvert --to notebook --execute notebook_test.ipynb
