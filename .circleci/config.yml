@@ -1,9 +1,23 @@
 version: 2.1
 jobs:
-  build:
+  file-validation:
     docker:
       - image: 'jupyter/pyspark-notebook'
     steps:
       - checkout
-      - run: echo "API_KEY = ${API_KEY}"
       - run: jupyter nbconvert --to notebook --execute notebook_test.ipynb
+  publish-to-s3:
+    docker:
+      - image: 'amazon/aws-cli:latest'
+    steps:
+      - run: echo "API_KEY = ${API_KEY}"
+
+workflows:
+  feature-workflow:
+    jobs:
+      - file-validation
+      - publish-to-s3:
+          - context:
+              - Credential
+
+
