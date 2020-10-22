@@ -2,14 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: 'circleci/python:latest'
+      - image: 'ipython/ipython'
     steps:
       - checkout
-      - run: pip install -r requirements.txt
-      - run: python sample.py
-
-workflows:
-  version: 2.1
-  build:
-    jobs:
-      - run-sample
+      - run: ipython run notebook_test.ipynb
