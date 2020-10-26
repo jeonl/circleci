@@ -25,6 +25,7 @@ jobs:
       - attach_workspace:
           at: .
       - run: ls -al
+      - run: ls -al ./workspace
       - run: aws s3 cp ./notebook_test.nbconvert.ipynb ${S3_LOCATION}
 
 workflows:
