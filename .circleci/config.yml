@@ -6,7 +6,6 @@ jobs:
     steps:
       - checkout
       - run: jupyter nbconvert --to notebook --execute notebook_test.ipynb
-      - run: ls -al
   deploy:
     docker:
       - image: 'amazon/aws-cli:latest'
@@ -14,24 +13,19 @@ jobs:
           AWS_ENV_SET_CMD: 'aws configure set'
           AWS_PROFILE: default
           AWS_OUTPUT: json
-          AWS_REGION: us-west-2
+          AWS_REGION: us-east-1
+          S3_LOCATION: 's3://jeonl-circleci-sec-test'
     steps:
-      - run: ${AWS_ENV_SET_CMD} region ${AWS_REGION}
-      - run: ${AWS_ENV_SET_CMD} output ${AWS_OUTPUT}
-      - run: ${AWS_ENV_SET_CMD} aws_access_key_id ${AWS_ACCESS_KEY_ID}
-      - run: ${AWS_ENV_SET_CMD} aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-      - run: cat ~/.aws/credentials
-      - run: cat ~/.aws/config
+      - run: mkdir -p ~/.aws && echo -e "[${AWS_PROFILE}]" > ~/.aws/config
+      - run: printf "${AWS_ACCESS_KEY_ID}\n${AWS_SECRET_ACCESS_KEY}\n${AWS_REGION}\n${AWS_OUTPUT}" | aws configure
+      - run: aws s3 cp notebook_test.nbconvert.ipynb ${S3_LOCATION}
 
 workflows:
   feature-workflow:
     jobs:
-#      - file-validation
+      - file-validation
       - deploy:
           context:
             - aws-context
-#          requires:
-#            - file-validation
-
-
-
+          requires:
+            - file-validation
