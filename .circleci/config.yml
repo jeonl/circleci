@@ -17,6 +17,7 @@ jobs:
           AWS_REGION: us-east-1
           S3_LOCATION: 's3://jeonl-circleci-sec-test'
     steps:
+      - checkout
       - run: mkdir -p ~/.aws && echo -e "[${AWS_PROFILE}]" > ~/.aws/config
       - run: printf "${AWS_ACCESS_KEY_ID}\n${AWS_SECRET_ACCESS_KEY}\n${AWS_REGION}\n${AWS_OUTPUT}" | aws configure
       - run: ls -al && aws s3 cp notebook_test.nbconvert.ipynb ${S3_LOCATION}
