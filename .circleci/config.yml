@@ -21,10 +21,12 @@ jobs:
           S3_LOCATION: 's3://jeonl-circleci-sec-test'
     steps:
       - run: yum install -y tar gzip
+      - run: mkdir -p ~/.aws && echo -e "[${AWS_PROFILE}]" > ~/.aws/config
+      # To use attach_workspace in CircleCI it requires to install tar and gzip commands.
       - attach_workspace:
           at: .
       - run: printf "${AWS_ACCESS_KEY_ID}\n${AWS_SECRET_ACCESS_KEY}\n${AWS_REGION}\n${AWS_OUTPUT}" | aws configure
-      - run: aws s3 cp ./notebook_test.nbconvert.ipynb ${S3_LOCATION}
+      - run: aws s3 cp notebook_test.nbconvert.ipynb ${S3_LOCATION}
 workflows:
   feature-workflow:
     jobs:
