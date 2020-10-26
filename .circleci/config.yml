@@ -6,8 +6,9 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: ./workspace
       - run: jupyter nbconvert --to notebook --execute notebook_test.ipynb
+      - run: cp notebook_test.nbconvert.ipynb ./workspace
   deploy:
     docker:
       - image: 'amazon/aws-cli:latest'
@@ -20,9 +21,9 @@ jobs:
     steps:
       - run: yum install -y tar gzip
       - attach_workspace:
-          at: .
-      - run: ls -al
-      - run: aws s3 cp notebook_test.nbconvert.ipynb ${S3_LOCATION}
+          at: ./workspace
+      - run: ls -al ./workspace
+      - run: aws s3 cp ./workspace/notebook_test.nbconvert.ipynb ${S3_LOCATION}
 
 workflows:
   feature-workflow:
