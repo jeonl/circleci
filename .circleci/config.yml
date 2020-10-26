@@ -6,20 +6,32 @@ jobs:
     steps:
       - checkout
       - run: jupyter nbconvert --to notebook --execute notebook_test.ipynb
-  publish-to-s3:
+      - run: ls -al
+  deploy:
     docker:
       - image: 'amazon/aws-cli:latest'
+        environment:
+          AWS_ENV_SET_CMD: 'aws configure set'
+          AWS_PROFILE: default
+          AWS_OUTPUT: json
+          AWS_REGION: us-west-2
     steps:
-      - run: echo "API_KEY = ${API_KEY}"
+      - run: ${AWS_ENV_SET_CMD} region ${AWS_REGION} --profile ${AWS_PROFILE}
+      - run: ${AWS_ENV_SET_CMD} output ${AWS_OUTPUT} --profile ${AWS_PROFILE}
+      - run: ${AWS_ENV_SET_CMD} aws_access_key_id ${AWS_ACCESS_KEY_ID} --profile ${AWS_PROFILE}
+      - run: ${AWS_ENV_SET_CMD} aws_secret_access_key ${AWS_SECRET_ACCESS_KEY} --profile ${AWS_PROFILE}
+      - run: cat ~/.aws/credentials
+      - run: cat ~/.aws/config
 
 workflows:
   feature-workflow:
     jobs:
       - file-validation
-      - publish-to-s3:
+      - deploy:
           context:
-            - Credentials
+            - aws-context
           requires:
             - file-validation
+
 
 
