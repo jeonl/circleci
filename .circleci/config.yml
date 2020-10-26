@@ -12,22 +12,22 @@ jobs:
             - .
   common-job-except-master-dummy:
     docker:
-      - image: 'jupyter/pyspark-notebook'
+      - image: 'alpine:latest'
     steps:
       - run: echo "Common job except master branch"
   feature-job-dummy:
     docker:
-      - image: 'jupyter/pyspark-notebook'
+      - image: 'alpine:latest'
     steps:
       - run: echo "Feature specific jobs"
   bugfix-job-dummy:
     docker:
-      - image: 'jupyter/pyspark-notebook'
+      - image: 'alpine:latest'
     steps:
       - run: echo "Bugfix specific jobs"
   common-post-processing:
     docker:
-      - image: 'jupyter/pyspark-notebook'
+      - image: 'alpine:latest'
     steps:
       - run: echo "Post processing"
   deploy:
@@ -60,7 +60,7 @@ jobs:
           when: always
           command: echo "Add a capture command here."
 workflows:
-  feature-workflow:
+  typical-workflow:
     jobs:
       - file-validation
       - common-job-except-master-dummy:
@@ -76,14 +76,14 @@ workflows:
           filters:
             branches:
               only:
-                - /bugfix[/].*/
+                - /feature[/].*/
       - bugfix-job-dummy:
           requires:
             - common-job-except-master-dummy
           filters:
             branches:
               only:
-                - /feature[/].*/
+                - /bugfix[/].*/
       - common-post-processing:
           requires:
             - file-validation
