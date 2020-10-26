@@ -5,8 +5,10 @@ jobs:
       - image: 'jupyter/pyspark-notebook'
     steps:
       - checkout
-      - attach_workspace:
-          at: ./workspace
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
       - run: jupyter nbconvert --to notebook --execute notebook_test.ipynb
       - run: cp notebook_test.nbconvert.ipynb ./workspace
   deploy:
@@ -21,9 +23,9 @@ jobs:
     steps:
       - run: yum install -y tar gzip
       - attach_workspace:
-          at: ./workspace
-      - run: ls -al ./workspace
-      - run: aws s3 cp ./workspace/notebook_test.nbconvert.ipynb ${S3_LOCATION}
+          at: .
+      - run: ls -al
+      - run: aws s3 cp ./notebook_test.nbconvert.ipynb ${S3_LOCATION}
 
 workflows:
   feature-workflow:
