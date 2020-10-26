@@ -23,9 +23,8 @@ jobs:
       - run: yum install -y tar gzip
       - attach_workspace:
           at: .
-      - run: ls -al
+      - run: printf "${AWS_ACCESS_KEY_ID}\n${AWS_SECRET_ACCESS_KEY}\n${AWS_REGION}\n${AWS_OUTPUT}" | aws configure
       - run: aws s3 cp ./notebook_test.nbconvert.ipynb ${S3_LOCATION}
-
 workflows:
   feature-workflow:
     jobs:
