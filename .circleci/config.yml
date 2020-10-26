@@ -6,11 +6,8 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/workspace
-      - run: pwd
+          at: .
       - run: jupyter nbconvert --to notebook --execute notebook_test.ipynb
-      - run: cp notebook_test.nbconvert.ipynb
-      -
   deploy:
     docker:
       - image: 'amazon/aws-cli:latest'
@@ -22,14 +19,9 @@ jobs:
           S3_LOCATION: 's3://jeonl-circleci-sec-test'
     steps:
       - attach_workspace:
-          at: /tmp/workspace
-      - run: |
-          pwd
-          ls -al /tmp/workspace
-          mkdir -p ~/.aws && echo -e "[${AWS_PROFILE}]" > ~/.aws/config
-          printf "${AWS_ACCESS_KEY_ID}\n${AWS_SECRET_ACCESS_KEY}\n${AWS_REGION}\n${AWS_OUTPUT}" | aws configure
-          ls -al
-      - run: aws s3 cp notebook_test.nbconvert.ipynb ${S3_LOCATION}
+          at: .
+      - run: ls -al
+#      - run: aws s3 cp notebook_test.nbconvert.ipynb ${S3_LOCATION}
 
 workflows:
   feature-workflow:
