@@ -6,6 +6,7 @@ jobs:
     steps:
       - checkout
       - run: jupyter nbconvert --to notebook --execute notebook_test.ipynb
+      - run: ls -al
   deploy:
     docker:
       - image: 'amazon/aws-cli:latest'
@@ -18,7 +19,7 @@ jobs:
     steps:
       - run: mkdir -p ~/.aws && echo -e "[${AWS_PROFILE}]" > ~/.aws/config
       - run: printf "${AWS_ACCESS_KEY_ID}\n${AWS_SECRET_ACCESS_KEY}\n${AWS_REGION}\n${AWS_OUTPUT}" | aws configure
-      - run: aws s3 cp notebook_test.nbconvert.ipynb ${S3_LOCATION}
+      - run: ls -al && aws s3 cp notebook_test.nbconvert.ipynb ${S3_LOCATION}
 
 workflows:
   feature-workflow:
