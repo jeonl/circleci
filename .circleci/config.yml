@@ -16,22 +16,22 @@ jobs:
           AWS_OUTPUT: json
           AWS_REGION: us-west-2
     steps:
-      - run: ${AWS_ENV_SET_CMD} region ${AWS_REGION} --profile ${AWS_PROFILE}
-      - run: ${AWS_ENV_SET_CMD} output ${AWS_OUTPUT} --profile ${AWS_PROFILE}
-      - run: ${AWS_ENV_SET_CMD} aws_access_key_id ${AWS_ACCESS_KEY_ID} --profile ${AWS_PROFILE}
-      - run: ${AWS_ENV_SET_CMD} aws_secret_access_key ${AWS_SECRET_ACCESS_KEY} --profile ${AWS_PROFILE}
+      - run: ${AWS_ENV_SET_CMD} region ${AWS_REGION}
+      - run: ${AWS_ENV_SET_CMD} output ${AWS_OUTPUT}
+      - run: ${AWS_ENV_SET_CMD} aws_access_key_id ${AWS_ACCESS_KEY_ID}
+      - run: ${AWS_ENV_SET_CMD} aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
       - run: cat ~/.aws/credentials
       - run: cat ~/.aws/config
 
 workflows:
   feature-workflow:
     jobs:
-      - file-validation
+#      - file-validation
       - deploy:
           context:
             - aws-context
-          requires:
-            - file-validation
+#          requires:
+#            - file-validation
 
 
 
