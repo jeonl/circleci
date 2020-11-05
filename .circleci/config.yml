@@ -12,10 +12,6 @@ jobs:
           profile-name: default
       - run: 'echo "Created time: $(date)" > create_file.txt'
       - run: aws s3 cp create_file.txt ${S3_LOCATION}
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
 workflows:
   typical-workflow:
     jobs:
